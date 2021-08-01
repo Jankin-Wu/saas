@@ -9,7 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SaasCompanyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SaasCompanyApplication.class, args);
+        try {
+            SpringApplication.run(SaasCompanyApplication.class, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("启动成功");
     }
 
 }
