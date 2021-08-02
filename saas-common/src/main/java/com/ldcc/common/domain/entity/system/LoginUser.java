@@ -30,6 +30,11 @@ public class LoginUser implements UserDetails {
      */
     private Long expireTime;
 
+    /**
+     * 登录IP地址
+     */
+    private String ipaddr;
+
 
     /**
      * 浏览器类型

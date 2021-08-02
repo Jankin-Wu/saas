@@ -5,6 +5,7 @@ import com.ldcc.common.utils.RedisUtils;
 import com.ldcc.common.utils.ServletUtils;
 import com.ldcc.common.utils.StringUtils;
 import com.ldcc.common.domain.entity.system.LoginUser;
+import com.ldcc.common.utils.ip.IpUtils;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -146,6 +147,8 @@ public class TokenService {
     public void setUserAgent(LoginUser loginUser)
     {
         UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        loginUser.setIpaddr(ip);
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }

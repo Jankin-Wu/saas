@@ -110,7 +110,7 @@ public class SysUserServiceImpl implements ISysUserService {
     public String checkPhoneUnique(SysUser user)
     {
         String userId = StringUtils.isNull(user.getUserId()) ? "-1" : user.getUserId();
-        SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
+        SysUser info = userMapper.checkPhoneUnique(user.getPhoneNumber());
         if (StringUtils.isNotNull(info) && !info.getUserId().equals(userId))
         {
             return UserConstants.NOT_UNIQUE;
