@@ -189,8 +189,6 @@ public class SysUserServiceImpl implements ISysUserService {
         return userMapper.updateUser(user);
     }
 
-
-
     /**
      * 通过用户ID删除用户
      *
@@ -202,19 +200,6 @@ public class SysUserServiceImpl implements ISysUserService {
     public int deleteUserById(String userId)
     {
         return userMapper.deleteUserById(userId);
-    }
-
-    /**
-     * 批量删除用户信息
-     *
-     * @param userIds 需要删除的用户ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteUserByIds(String[] userIds)
-    {
-        return userMapper.deleteUserByIds(userIds);
     }
 
 }

@@ -1,9 +1,13 @@
 package com.ldcc.system.controller;
 
+import com.ldcc.common.domain.entity.system.Permission;
 import com.ldcc.common.domain.model.AjaxResult;
+import com.ldcc.system.service.IPermissionService;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,7 +20,7 @@ import java.util.Map;
 public class PermissionController {
 
     @Autowired
-    private PermissionService permissionService;
+    private IPermissionService permissionService;
     /**
      * 保存
      */
@@ -40,19 +44,19 @@ public class PermissionController {
     /**
      * 查询列表
      */
-    @RequestMapping(value = "/permission", method = RequestMethod.GET)
+    @GetMapping ("/permission")
     public AjaxResult findAll(@RequestParam Map map) {
         List<Permission> list =  permissionService.findAll(map);
-        return new Result(ResultCode.SUCCESS,list);
+        return AjaxResult.success(list);
     }
 
     /**
      * 根据ID查询
      */
-    @RequestMapping(value = "/permission/{id}", method = RequestMethod.GET)
+    @GetMapping("/permission/{id}")
     public AjaxResult findById(@PathVariable(value = "id") String id) throws Exception {
         Map map = permissionService.findById(id);
-        return new Result(ResultCode.SUCCESS,map);
+        return AjaxResult.success(map);
     }
 
 
@@ -60,9 +64,9 @@ public class PermissionController {
     /**
      * 根据id删除
      */
-    @RequestMapping(value = "/permission/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/permission/{id}")
     public AjaxResult delete(@PathVariable(value = "id") String id) throws Exception {
         permissionService.deleteById(id);
-        return new Result(ResultCode.SUCCESS);
+        return AjaxResult.success();
     }
 }

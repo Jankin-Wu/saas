@@ -18,6 +18,12 @@ public class SysUser extends BaseEntity {
     /** 用户账号 */
     private String userName;
 
+    /** 公司ID */
+    private String companyId;
+
+    /** 用户昵称 */
+    private String nickName;
+
     /** 用户邮箱 */
     private String email;
 
@@ -36,28 +42,16 @@ public class SysUser extends BaseEntity {
     /** 部门对象 */
     private SysDept dept;
 
-    /** 入职时间 */
-    private Date timeOfEntry;
-
-    /** 聘用形式 */
-    private int formOfEmployment;
+    /** 公司对象 */
+    private SysCompany company;
 
     /** 工号 */
     private String workNumber;
 
-    /** 管理形式 */
-    private String formOfManagement;
-
     /** 工作城市 */
     private String workingCity;
 
-    /** 转正时间 */
-    private Date correctionTime;
-
     /** 在职状态 1.在职 2.离职 */
     private Integer inServiceStatus;
-
-    /** 部门名称 */
-    private String departmentName;
 
 }

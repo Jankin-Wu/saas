@@ -21,9 +21,6 @@ public class SysDept extends BaseEntity {
     /** 部门名称 */
     private String deptName;
 
-    /** 显示顺序 */
-    private String orderNum;
-
     /** 负责人 */
     private String leader;
 

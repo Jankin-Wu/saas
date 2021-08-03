@@ -1,4 +1,4 @@
-package com.ldcc.common.domain.entity;
+package com.ldcc.common.domain.entity.system;
 
 import com.ldcc.common.domain.model.BaseEntity;
 import lombok.Data;
@@ -6,9 +6,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class Company extends BaseEntity {
+public class SysCompany extends BaseEntity {
 
-    private String id;
+    private String companyId;
     /**
      * 公司名称
      */
