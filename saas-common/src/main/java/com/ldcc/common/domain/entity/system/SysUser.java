@@ -39,6 +39,9 @@ public class SysUser extends BaseEntity {
     /** 帐号状态（0正常 1停用） */
     private String status;
 
+    /** 角色对象 */
+    private List<SysRole> roles;
+
     /** 部门对象 */
     private SysDept dept;
 
@@ -53,5 +56,15 @@ public class SysUser extends BaseEntity {
 
     /** 在职状态 1.在职 2.离职 */
     private Integer inServiceStatus;
+
+    public boolean isAdmin()
+    {
+        return isAdmin(this.userId);
+    }
+
+    public static boolean isAdmin(String userId)
+    {
+        return userId != null && userId.equals("1");
+    }
 
 }

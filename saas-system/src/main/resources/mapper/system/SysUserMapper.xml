@@ -62,6 +62,8 @@
         <if test="companyId != null and companyId != ''">
             AND u.company_id = #{companyId}
         </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
     <select id="selectUserByUserName" resultMap="SysUserResult" parameterType="String">
         <include refid="selectUserVo"/>

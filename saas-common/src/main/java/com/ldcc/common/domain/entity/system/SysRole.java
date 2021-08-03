@@ -1,9 +1,10 @@
 package com.ldcc.common.domain.entity.system;
 
+import com.ldcc.common.domain.model.BaseEntity;
 import lombok.Data;
 
 @Data
-public class SysRole {
+public class SysRole extends BaseEntity {
 
     /** 角色ID */
     private String roleId;
@@ -24,10 +25,6 @@ public class SysRole {
 
     /** 角色状态（0正常 1停用） */
     private String status;
-
-
-    /** 用户是否存在此角色标识 默认不存在 */
-    private boolean flag = false;
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
