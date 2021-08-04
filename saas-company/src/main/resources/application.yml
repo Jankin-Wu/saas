@@ -13,7 +13,7 @@ server:
 spring:
   #1.应用配置
   application:
-    name: saas-company #指定服务名
+    name: saas-api #指定服务名
   #2.数据库连接池
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -38,7 +38,7 @@ logging:
 # MyBatis配置
 mybatis:
   # 搜索指定包别名
-  typeAliasesPackage: com.ldcc.model.domain
+  typeAliasesPackage: com.ldcc.common.domain
   # 配置mapper的扫描，找到所有的mapper.xml映射文件
   mapperLocations: classpath*:mapper/**/*Mapper.xml
   # 加载全局的配置文件

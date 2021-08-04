@@ -1,6 +1,7 @@
 package com.ldcc.framework.web.service;
 
 import com.ldcc.common.domain.entity.system.SysUser;
+import com.ldcc.system.service.ISysMenuService;
 import com.ldcc.system.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

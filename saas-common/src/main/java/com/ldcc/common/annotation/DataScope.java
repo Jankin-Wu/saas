@@ -21,5 +21,10 @@ public @interface DataScope
      * 用户表的别名
      */
     public String userAlias() default "";
+
+    /**
+     * 公司表的别名
+     */
+    public String companyAlias() default "";
 }
 

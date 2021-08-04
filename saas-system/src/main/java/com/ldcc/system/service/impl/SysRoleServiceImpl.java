@@ -145,17 +145,4 @@ public class SysRoleServiceImpl implements ISysRoleService {
         return roleMapper.deleteRoleById(roleId);
     }
 
-    /**
-     * 批量删除角色信息
-     *
-     * @param roleIds 需要删除的角色ID
-     * @return 结果
-     */
-    @Override
-    @Transactional
-    public int deleteRoleByIds(String[] roleIds)
-    {
-        return roleMapper.deleteRoleByIds(roleIds);
-    }
-
 }

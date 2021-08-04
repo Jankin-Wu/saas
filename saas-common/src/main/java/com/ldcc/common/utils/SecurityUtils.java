@@ -1,5 +1,8 @@
 package com.ldcc.common.utils;
 
+import com.ldcc.common.constant.HttpStatus;
+import com.ldcc.common.domain.entity.system.LoginUser;
+import com.ldcc.common.exception.CustomException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -16,5 +19,35 @@ public class SecurityUtils {
     public static Authentication getAuthentication()
     {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 获取用户账户
+     **/
+    public static String getUsername()
+    {
+        try
+        {
+            return getLoginUser().getUsername();
+        }
+        catch (Exception e)
+        {
+            throw new CustomException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    /**
+     * 获取用户
+     **/
+    public static LoginUser getLoginUser()
+    {
+        try
+        {
+            return (LoginUser) getAuthentication().getPrincipal();
+        }
+        catch (Exception e)
+        {
+            throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+        }
     }
 }

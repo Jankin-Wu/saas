@@ -83,12 +83,4 @@ public interface ISysRoleService {
      * @return 结果
      */
     public int deleteRoleById(String roleId);
-
-    /**
-     * 批量删除角色信息
-     *
-     * @param roleIds 需要删除的角色ID
-     * @return 结果
-     */
-    public int deleteRoleByIds(String[] roleIds);
 }

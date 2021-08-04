@@ -54,6 +54,11 @@ public class DataScopeAspect
     public static final String DATA_SCOPE_SELF = "5";
 
     /**
+     * 公司数据权限
+     */
+    public static final String DATA_SCOPE_COMPANY = "6";
+
+    /**
      * 数据权限过滤关键字
      */
     public static final String DATA_SCOPE = "dataScope";
@@ -87,7 +92,7 @@ public class DataScopeAspect
             if (StringUtils.isNotNull(currentUser) && !currentUser.isAdmin())
             {
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(),
-                        controllerDataScope.userAlias());
+                        controllerDataScope.userAlias(),controllerDataScope.companyAlias());
             }
         }
     }
@@ -99,7 +104,7 @@ public class DataScopeAspect
      * @param user 用户
      * @param userAlias 别名
      */
-    public static void dataScopeFilter(JoinPoint joinPoint, SysUser user, String deptAlias, String userAlias)
+    public static void dataScopeFilter(JoinPoint joinPoint, SysUser user, String deptAlias, String userAlias, String companyAlias)
     {
         StringBuilder sqlString = new StringBuilder();
 
@@ -137,6 +142,12 @@ public class DataScopeAspect
                 {
                     // 数据权限为仅本人且没有userAlias别名不查询任何数据
                     sqlString.append(" OR 1=0 ");
+                }
+            }
+            else if (DATA_SCOPE_COMPANY.equals(dataScope))
+            {
+                if (StringUtils.isNotBlank(companyAlias)){
+                    sqlString.append(StringUtils.format(" OR {}.company_id = {} ", companyAlias, user.getCompanyId()));
                 }
             }
         }

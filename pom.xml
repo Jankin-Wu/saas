@@ -104,6 +104,7 @@
         <module>saas-company</module>
         <module>saas-framework</module>
         <module>saas-system</module>
+        <module>saas-api</module>
     </modules>
     <packaging>pom</packaging>
 

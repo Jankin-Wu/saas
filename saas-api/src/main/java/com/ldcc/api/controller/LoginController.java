@@ -1,4 +1,4 @@
-package com.ldcc.framework.web.controller;
+package com.ldcc.api.controller;
 
 import com.ldcc.common.constant.Constants;
 import com.ldcc.common.domain.entity.system.LoginBody;

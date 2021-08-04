@@ -16,7 +16,7 @@ public class SaasCompanyApplication {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("启动成功");
+        System.err.println("启动成功");
     }
 
 }
