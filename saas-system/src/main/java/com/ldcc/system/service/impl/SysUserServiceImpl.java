@@ -1,5 +1,6 @@
 package com.ldcc.system.service.impl;
 
+import com.ldcc.common.annotation.DataScope;
 import com.ldcc.common.constant.UserConstants;
 import com.ldcc.common.utils.StringUtils;
 import com.ldcc.common.domain.entity.system.SysRole;
@@ -33,6 +34,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @return 用户信息集合信息
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user)
     {
         return userMapper.selectUserList(user);
