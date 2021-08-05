@@ -5,6 +5,7 @@ import com.ldcc.common.domain.entity.system.LoginUser;
 import com.ldcc.common.exception.CustomException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author ：wwg
@@ -50,4 +51,17 @@ public class SecurityUtils {
             throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
         }
     }
+
+    /**
+     * 生成BCryptPasswordEncoder密码
+     *
+     * @param password 密码
+     * @return 加密字符串
+     */
+    public static String encryptPassword(String password)
+    {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.encode(password);
+    }
+
 }

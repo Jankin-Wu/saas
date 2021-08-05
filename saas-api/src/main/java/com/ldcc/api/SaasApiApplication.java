@@ -9,7 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //@EnableSwagger2
 @MapperScan(basePackages = "com.ldcc.**.mapper")// 使用MapperScan批量扫描所有的Mapper接口；
-@ComponentScan("com.ldcc.**.service")
+@ComponentScan("com.ldcc.**")
 @SpringBootApplication
 public class SaasApiApplication {
 

@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @description ：redis 工具类
  * @date ：2021/8/1 23:05
  */
+@Component
 public class RedisUtils {
 
     @Autowired

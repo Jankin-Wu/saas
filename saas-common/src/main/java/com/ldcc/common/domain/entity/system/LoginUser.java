@@ -56,6 +56,15 @@ public class LoginUser implements UserDetails {
      */
     private SysUser user;
 
+    public LoginUser()
+    {
+    }
+
+    public LoginUser(SysUser user, Set<String> permissions) {
+        this.user = user;
+        this.permissions = permissions;
+    }
+
     @JsonIgnore
     @Override
     public String getPassword()

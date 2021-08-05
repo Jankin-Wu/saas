@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-@PropertySource(value = { "classpath:application.yml" })
+//@PropertySource(value = { "classpath:application.yml" })
 public class SwaggerConfig
 {
 

@@ -110,6 +110,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/common/download/resource**").anonymous()
                 .antMatchers("/swagger-ui.html").anonymous()
                 .antMatchers("/swagger-resources/**").anonymous()
+                .antMatchers("/*/api-docs").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()

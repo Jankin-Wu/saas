@@ -5,6 +5,7 @@ import com.ldcc.common.domain.entity.system.LoginBody;
 import com.ldcc.common.domain.entity.system.LoginUser;
 import com.ldcc.common.domain.model.AjaxResult;
 import com.ldcc.framework.web.service.TokenService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
  * @description 登录验证
  * @create 2021-08-02 10:54
  **/
+@Api(tags = "登录模块")
 @RestController
 public class LoginController {
 

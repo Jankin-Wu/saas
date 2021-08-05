@@ -1,12 +1,52 @@
 package com.ldcc.common.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.ldcc.common.constant.HttpStatus;
 import com.ldcc.common.domain.model.AjaxResult;
+import com.ldcc.common.page.PageDomain;
+import com.ldcc.common.page.TableDataInfo;
+import com.ldcc.common.page.TableSupport;
+import com.ldcc.common.utils.SqlUtils;
+import com.ldcc.common.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class BaseController {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+
+    /**
+     * 设置请求分页数据
+     */
+    protected void startPage()
+    {
+        PageDomain pageDomain = TableSupport.buildPageRequest();
+        Integer pageNum = pageDomain.getPageNum();
+        Integer pageSize = pageDomain.getPageSize();
+        if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+        {
+            String orderBy = SqlUtils.escapeOrderBySql(pageDomain.getOrderByColumn());
+            PageHelper.startPage(pageNum, pageSize, orderBy);
+        }
+    }
+
+    /**
+     * 响应请求分页数据
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected TableDataInfo getDataTable(List<?> list)
+    {
+        TableDataInfo rspData = new TableDataInfo();
+        rspData.setCode(HttpStatus.SUCCESS);
+        rspData.setMsg("查询成功");
+        rspData.setRows(list);
+        rspData.setTotal(new PageInfo(list).getTotal());
+        return rspData;
+    }
 
     /**
      * 响应返回结果
