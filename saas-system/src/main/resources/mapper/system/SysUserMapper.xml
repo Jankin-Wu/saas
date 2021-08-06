@@ -21,6 +21,8 @@
         <result property="updateBy"     column="update_by"    />
         <result property="updateTime"   column="update_time"  />
         <result property="remark"       column="remark"       />
+        <association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
+        <collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
     </resultMap>
 
     <resultMap id="deptResult" type="com.ldcc.common.domain.entity.system.SysDept">
@@ -31,8 +33,16 @@
         <result property="status"   column="dept_status" />
     </resultMap>
 
+    <resultMap id="RoleResult" type="com.ldcc.common.domain.entity.system.SysRole">
+        <id     property="roleId"       column="role_id"        />
+        <result property="roleName"     column="role_name"      />
+        <result property="roleKey"      column="role_key"       />
+        <result property="dataScope"     column="data_scope"    />
+        <result property="status"       column="role_status"    />
+    </resultMap>
+
     <sql id="selectUserVo">
-        select u.*,
+        select u.user_id, u.dept_id, u.user_name, u.nick_name, u.email,u.phone_number, u.password, u.status,
                d.dept_id, d.parent_id, d.dept_name, d.leader,
                r.role_id, r.role_name, r.role_key, r.data_scope, r.status as role_status,
                c.*

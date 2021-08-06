@@ -8,10 +8,14 @@ import com.ldcc.common.domain.model.AjaxResult;
 import com.ldcc.common.page.TableDataInfo;
 import com.ldcc.common.utils.SecurityUtils;
 import com.ldcc.common.utils.StringUtils;
+import com.ldcc.system.dto.UserParam;
 import com.ldcc.system.service.ISysRoleService;
 import com.ldcc.system.service.ISysUserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -40,10 +44,15 @@ public class SysUserController extends BaseController {
     @ApiOperation("用户列表")
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysUser user)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userParam", value = "用户信息", dataType = "String", paramType = "body")
+    })
+    public TableDataInfo list(UserParam userParam)
     {
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(userParam, sysUser);
         startPage();
-        List<SysUser> list = userService.selectUserList(user);
+        List<SysUser> list = userService.selectUserList(sysUser);
         return getDataTable(list);
     }
 
@@ -52,7 +61,7 @@ public class SysUserController extends BaseController {
      */
     @ApiOperation("根据用户id获取详细信息")
     @PreAuthorize("@ss.hasPermi('system:user:query')")
-    @GetMapping(value = { "/", "/{userId}" })
+    @GetMapping("/{userId}")
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) String userId)
     {
         AjaxResult ajax = AjaxResult.success();
@@ -69,7 +78,7 @@ public class SysUserController extends BaseController {
      */
     @ApiOperation("新增用户")
     @PreAuthorize("@ss.hasPermi('system:user:add')")
-    @PostMapping
+    @PostMapping("/add")
     public AjaxResult add(@Validated @RequestBody SysUser user)
     {
         if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
