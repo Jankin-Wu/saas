@@ -57,23 +57,25 @@
         select u.*, d.dept_name, d.dept_id, d.leader, c.* from sys_user u
         left join sys_dept d on u.dept_id = d.dept_id
         left join sys_company c on u.company_id = c.company_id
-        <if test="userName != null and userName != ''">
+        <where>
+            <if test="userName != null and userName != ''">
             AND u.user_name like concat('%', #{userName}, '%')
-        </if>
-        <if test="status != null and status != ''">
-            AND u.status = #{status}
-        </if>
-        <if test="phoneNumber != null and phoneNumber != ''">
-            AND u.phoneNumber like concat('%', #{phoneNumber}, '%')
-        </if>
-        <if test="deptId != null and deptId != ''">
-            AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
-        </if>
-        <if test="companyId != null and companyId != ''">
-            AND u.company_id = #{companyId}
-        </if>
-        <!-- 数据范围过滤 -->
-        ${params.dataScope}
+            </if>
+            <if test="status != null and status != ''">
+                AND u.status = #{status}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND u.phoneNumber like concat('%', #{phoneNumber}, '%')
+            </if>
+            <if test="deptId != null and deptId != ''">
+                AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
+            </if>
+            <if test="companyId != null and companyId != ''">
+                AND u.company_id = #{companyId}
+            </if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+        </where>
     </select>
     <select id="selectUserByUserName" resultMap="SysUserResult" parameterType="String">
         <include refid="selectUserVo"/>

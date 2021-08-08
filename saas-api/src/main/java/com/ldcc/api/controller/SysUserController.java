@@ -45,7 +45,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userParam", value = "用户信息", dataType = "String", paramType = "body")
+            @ApiImplicitParam(name = "userParam", value = "用户信息", dataType = "com.ldcc.system.dto.UserParam", paramType = "query")
     })
     public TableDataInfo list(UserParam userParam)
     {
