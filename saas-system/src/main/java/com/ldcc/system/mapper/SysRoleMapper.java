@@ -83,5 +83,11 @@ public interface SysRoleMapper {
      */
     public int deleteRoleById(String roleId);
 
-
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param roleName 角色名称
+     * @return 角色信息
+     */
+    public SysRole checkRoleNameUnique(String roleName);
 }

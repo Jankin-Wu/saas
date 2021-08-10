@@ -1,5 +1,7 @@
 package com.ldcc.system.service.impl;
 
+import com.ldcc.common.constant.UserConstants;
+import com.ldcc.common.exception.CustomException;
 import com.ldcc.common.utils.StringUtils;
 import com.ldcc.common.utils.spring.SpringUtils;
 import com.ldcc.common.domain.entity.system.SysRole;
@@ -77,6 +79,42 @@ public class SysRoleServiceImpl implements ISysRoleService {
         return roleMapper.selectRoleById(roleId);
     }
 
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public String checkRoleNameUnique(SysRole role)
+    {
+        String roleId = StringUtils.isNull(role.getRoleId()) ? "-1" : role.getRoleId();
+        SysRole info = roleMapper.checkRoleNameUnique(role.getRoleName());
+        if (StringUtils.isNotNull(info) && !info.getRoleId().equals(roleId))
+        {
+            return UserConstants.NOT_UNIQUE;
+        }
+        return UserConstants.UNIQUE;
+    }
+
+    /**
+     * 校验角色权限是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    @Override
+    public String checkRoleKeyUnique(SysRole role)
+    {
+        String roleId = StringUtils.isNull(role.getRoleId()) ? "-1" : role.getRoleId();
+        SysRole info = roleMapper.checkRoleKeyUnique(role.getRoleKey());
+        if (StringUtils.isNotNull(info) && !info.getRoleId().equals(roleId))
+        {
+            return UserConstants.NOT_UNIQUE;
+        }
+        return UserConstants.UNIQUE;
+    }
+
 
     /**
      * 新增保存角色信息
@@ -116,6 +154,20 @@ public class SysRoleServiceImpl implements ISysRoleService {
     public int updateRoleStatus(SysRole role)
     {
         return roleMapper.updateRole(role);
+    }
+
+    /**
+     * 校验角色是否允许操作
+     *
+     * @param role 角色信息
+     */
+    @Override
+    public void checkRoleAllowed(SysRole role)
+    {
+        if (StringUtils.isNotNull(role.getRoleId()) && role.isAdmin())
+        {
+            throw new CustomException("不允许操作超级管理员角色");
+        }
     }
 
     /**

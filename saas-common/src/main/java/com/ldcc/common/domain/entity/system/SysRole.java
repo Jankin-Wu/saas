@@ -28,4 +28,14 @@ public class SysRole extends BaseEntity {
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
+
+    public boolean isAdmin()
+    {
+        return isAdmin(this.roleId);
+    }
+
+    public static boolean isAdmin(String roleId)
+    {
+        return roleId != null && roleId.equals("1");
+    }
 }

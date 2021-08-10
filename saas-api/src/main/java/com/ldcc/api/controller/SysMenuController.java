@@ -1,21 +1,13 @@
 package com.ldcc.api.controller;
 
-import com.ldcc.common.constant.Constants;
-import com.ldcc.common.constant.UserConstants;
 import com.ldcc.common.controller.BaseController;
-import com.ldcc.common.domain.entity.system.LoginUser;
 import com.ldcc.common.domain.entity.system.SysMenu;
-import com.ldcc.common.domain.model.AjaxResult;
-import com.ldcc.common.utils.SecurityUtils;
-import com.ldcc.common.utils.ServletUtils;
-import com.ldcc.common.utils.StringUtils;
 import com.ldcc.framework.web.service.TokenService;
 import com.ldcc.system.service.ISysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,9 +45,9 @@ public class SysMenuController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:menu:query')")
     @GetMapping(value = "/{menuId}")
-    public AjaxResult getInfo(@PathVariable String menuId)
+    public SysMenu getInfo(@PathVariable String menuId)
     {
-        return AjaxResult.success(menuService.selectMenuById(menuId));
+        return menuService.selectMenuById(menuId);
     }
 
     /**
@@ -94,11 +86,23 @@ public class SysMenuController extends BaseController {
         return menuService.deleteMenuById(menuId);
     }
 
+    /**
+     * 是否存在菜单子节点
+     *
+     * @param menuId 菜单ID
+     * @return 结果 true 存在 false 不存在
+     */
     @GetMapping("/hasChildByMenuId")
     public boolean hasChildByMenuId(String menuId) {
         return menuService.hasChildByMenuId(menuId);
     }
 
+    /**
+     * 查询菜单是否存在角色
+     *
+     * @param menuId 菜单ID
+     * @return 结果 true 存在 false 不存在
+     */
     @GetMapping("/checkMenuExistRole")
     public boolean checkMenuExistRole(String menuId) {
         return menuService.checkMenuExistRole(menuId);

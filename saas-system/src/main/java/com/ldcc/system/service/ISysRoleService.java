@@ -34,6 +34,22 @@ public interface ISysRoleService {
      */
     public List<SysRole> selectRoleAll();
 
+    /**
+     * 校验角色名称是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    public String checkRoleNameUnique(SysRole role);
+
+    /**
+     * 校验角色权限是否唯一
+     *
+     * @param role 角色信息
+     * @return 结果
+     */
+    public String checkRoleKeyUnique(SysRole role);
+
 
     /**
      * 通过角色ID查询角色
@@ -51,6 +67,13 @@ public interface ISysRoleService {
      * @return 结果
      */
     public int insertRole(SysRole role);
+
+    /**
+     * 校验角色是否允许操作
+     *
+     * @param role 角色信息
+     */
+    public void checkRoleAllowed(SysRole role);
 
     /**
      * 修改保存角色信息

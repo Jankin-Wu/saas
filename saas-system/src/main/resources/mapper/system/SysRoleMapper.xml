@@ -97,5 +97,9 @@
         <include refid="selectRoleVo"/>
         where r.role_key=#{roleKey} limit 1
     </select>
+    <select id="checkRoleNameUnique" resultMap="SysRoleResult">
+        <include refid="selectRoleVo"/>
+        where r.role_name=#{roleName} limit 1
+    </select>
 
 </mapper>
