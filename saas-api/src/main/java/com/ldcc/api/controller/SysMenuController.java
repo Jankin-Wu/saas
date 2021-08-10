@@ -42,13 +42,10 @@ public class SysMenuController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:menu:list')")
     @ApiOperation("查询菜单列表")
-    @GetMapping("/list")
-    public AjaxResult list(SysMenu menu)
+    @GetMapping("/list/{userId}")
+    public List<SysMenu> list(SysMenu menu, @PathVariable("userId") String userId)
     {
-        LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
-        String userId = loginUser.getUser().getUserId();
-        List<SysMenu> menus = menuService.selectMenuList(menu, userId);
-        return AjaxResult.success(menus);
+        return  menuService.selectMenuList(menu, userId);
     }
 
     /**
@@ -65,44 +62,26 @@ public class SysMenuController extends BaseController {
      * 新增菜单
      */
     @PreAuthorize("@ss.hasPermi('system:menu:add')")
-    @PostMapping
-    public AjaxResult add(@Validated @RequestBody SysMenu menu)
+    @PostMapping("/add")
+    public int add(@RequestBody SysMenu menu)
     {
-        if (UserConstants.NOT_UNIQUE.equals(menuService.checkMenuNameUnique(menu)))
-        {
-            return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
-        }
-        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame())
-                && !StringUtils.startsWithAny(menu.getPath(), Constants.HTTP, Constants.HTTPS))
-        {
-            return AjaxResult.error("新增菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
-        }
-        menu.setCreateBy(SecurityUtils.getUsername());
-        return toAjax(menuService.insertMenu(menu));
+        return menuService.insertMenu(menu);
     }
+
+    @GetMapping("/checkMenuNameUnique")
+    public String checkMenuNameUnique(SysMenu menu) {
+        return menuService.checkMenuNameUnique(menu);
+    }
+
 
     /**
      * 修改菜单
      */
     @PreAuthorize("@ss.hasPermi('system:menu:edit')")
-    @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysMenu menu)
+    @PutMapping("/update")
+    public int edit(@RequestBody SysMenu menu)
     {
-        if (UserConstants.NOT_UNIQUE.equals(menuService.checkMenuNameUnique(menu)))
-        {
-            return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，菜单名称已存在");
-        }
-        else if (UserConstants.YES_FRAME.equals(menu.getIsFrame())
-                && !StringUtils.startsWithAny(menu.getPath(), Constants.HTTP, Constants.HTTPS))
-        {
-            return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，地址必须以http(s)://开头");
-        }
-        else if (menu.getMenuId().equals(menu.getParentId()))
-        {
-            return AjaxResult.error("修改菜单'" + menu.getMenuName() + "'失败，上级菜单不能选择自己");
-        }
-        menu.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(menuService.updateMenu(menu));
+        return menuService.updateMenu(menu);
     }
 
     /**
@@ -110,16 +89,18 @@ public class SysMenuController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:menu:remove')")
     @DeleteMapping("/{menuId}")
-    public AjaxResult remove(@PathVariable("menuId") String menuId)
+    public int remove(@PathVariable("menuId") String menuId)
     {
-        if (menuService.hasChildByMenuId(menuId))
-        {
-            return AjaxResult.error("存在子菜单,不允许删除");
-        }
-        if (menuService.checkMenuExistRole(menuId))
-        {
-            return AjaxResult.error("菜单已分配,不允许删除");
-        }
-        return toAjax(menuService.deleteMenuById(menuId));
+        return menuService.deleteMenuById(menuId);
+    }
+
+    @GetMapping("/hasChildByMenuId")
+    public boolean hasChildByMenuId(String menuId) {
+        return menuService.hasChildByMenuId(menuId);
+    }
+
+    @GetMapping("/checkMenuExistRole")
+    public boolean checkMenuExistRole(String menuId) {
+        return menuService.checkMenuExistRole(menuId);
     }
 }

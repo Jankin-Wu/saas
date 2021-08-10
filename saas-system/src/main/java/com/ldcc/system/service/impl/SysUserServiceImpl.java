@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -149,6 +150,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Transactional
     public int insertUser(SysUser user)
     {
+        user.setCreateTime(new Date());
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         return rows;
@@ -164,6 +166,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Transactional
     public int updateUser(SysUser user)
     {
+        user.setUpdateTime(new Date());
         return userMapper.updateUser(user);
     }
 

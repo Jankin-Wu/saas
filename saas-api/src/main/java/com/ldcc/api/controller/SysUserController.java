@@ -42,84 +42,93 @@ public class SysUserController extends BaseController {
      * 获取用户列表
      */
     @ApiOperation("用户列表")
-    @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userParam", value = "用户信息", dataType = "com.ldcc.system.dto.UserParam", paramType = "query")
     })
-    public TableDataInfo list(UserParam userParam)
+    public List<SysUser> list(UserParam userParam)
     {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(userParam, sysUser);
-        startPage();
-        List<SysUser> list = userService.selectUserList(sysUser);
-        return getDataTable(list);
+        return userService.selectUserList(sysUser);
     }
 
     /**
      * 根据用户编号获取详细信息
      */
     @ApiOperation("根据用户id获取详细信息")
-    @PreAuthorize("@ss.hasPermi('system:user:query')")
     @GetMapping("/{userId}")
-    public AjaxResult getInfo(@PathVariable(value = "userId", required = false) String userId)
+    public List<SysRole> getInfo(@PathVariable(value = "userId", required = false) String userId)
     {
-        AjaxResult ajax = AjaxResult.success();
-        List<SysRole> roles = roleService.selectRoleAll();
-        if (StringUtils.isNotNull(userId))
-        {
-            ajax.put(AjaxResult.DATA_TAG, userService.selectUserById(userId));
-        }
-        return ajax;
+        return roleService.selectRoleAll();
+    }
+
+    /**
+     * 通过用户名查询用户
+     *
+     * @param userName 用户名
+     * @return 用户对象信息
+     */
+    @PostMapping("/selectUserByUserName")
+    public SysUser selectUserByUserName(String userName) {
+        return userService.selectUserByUserName(userName);
     }
 
     /**
      * 新增用户
      */
     @ApiOperation("新增用户")
-    @PreAuthorize("@ss.hasPermi('system:user:add')")
     @PostMapping("/add")
-    public AjaxResult add(@Validated @RequestBody SysUser user)
+    public int add(@RequestBody SysUser user)
     {
-        if (UserConstants.NOT_UNIQUE.equals(userService.checkUserNameUnique(user.getUserName())))
-        {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，登录账号已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getPhoneNumber())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
-        {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getEmail())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-        {
-            return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
-        }
-        user.setCreateBy(SecurityUtils.getUsername());
-        user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
-        return toAjax(userService.insertUser(user));
+        return userService.insertUser(user);
+    }
+
+    /**
+     * 校验用户名称是否唯一
+     *
+     * @param userName 用户名称
+     * @return 结果
+     */
+    @PostMapping("/checkUserNameUnique")
+    public String checkUserNameUnique(@RequestBody String userName) {
+        return userService.checkUserNameUnique(userName);
+    }
+
+    /**
+     * 校验手机号码是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @PostMapping("/checkEmailUnique")
+    public String checkPhoneUnique(@RequestBody SysUser user) {
+        return userService.checkEmailUnique(user);
+    }
+
+    /**
+     * 校验email是否唯一
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    @PostMapping("/checkEmailUnique")
+    public String checkEmailUnique(@RequestBody SysUser user) {
+        return userService.checkEmailUnique(user);
     }
 
     /**
      * 修改用户
      */
-    @ApiOperation("修改用户")
-    @PreAuthorize("@ss.hasPermi('system:user:edit')")
-    @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysUser user)
+    @ApiOperation("修改用户信息")
+    @PutMapping("/update")
+    public int edit(@RequestBody SysUser user)
     {
-        if (StringUtils.isNotEmpty(user.getPhoneNumber())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkPhoneUnique(user)))
-        {
-            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getEmail())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-        {
-            return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
-        }
-        user.setUpdateBy(SecurityUtils.getUsername());
-        return toAjax(userService.updateUser(user));
+        return userService.updateUser(user);
     }
 
+    @DeleteMapping("/delete/{userId}")
+    public int deleteUserById(@PathVariable(value = "userId", required = false) String userId) {
+        return userService.deleteUserById(userId);
+    }
 }
