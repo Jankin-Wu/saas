@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class SysRole extends BaseEntity {
 
+    private static final long serialVersionUID = -3841336338874106908L;
+
     /** 角色ID */
     private String roleId;
 

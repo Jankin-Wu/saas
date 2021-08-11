@@ -2,7 +2,13 @@ package com.ldcc.api.controller;
 
 import com.ldcc.common.constant.UserConstants;
 import com.ldcc.common.controller.BaseController;
+import com.ldcc.common.domain.entity.system.LoginUser;
 import com.ldcc.common.domain.entity.system.SysRole;
+import com.ldcc.common.domain.model.AjaxResult;
+import com.ldcc.common.page.TableDataInfo;
+import com.ldcc.common.utils.SecurityUtils;
+import com.ldcc.common.utils.ServletUtils;
+import com.ldcc.common.utils.StringUtils;
 import com.ldcc.framework.web.service.SysPermissionService;
 import com.ldcc.framework.web.service.TokenService;
 import com.ldcc.system.service.ISysRoleService;
@@ -13,14 +19,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wwg
  * @description 角色信息控制层
  * @date 2021/8/10 22:53
  */
+@RestController
+@RequestMapping("/system/role")
 public class SysRoleController extends BaseController {
-
     @Autowired
     private ISysRoleService roleService;
 
@@ -35,9 +43,11 @@ public class SysRoleController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('system:role:list')")
     @GetMapping("/list")
-    public List<SysRole> list(SysRole role)
+    public TableDataInfo list(SysRole role)
     {
-        return roleService.selectRoleList(role);
+        startPage();
+        List<SysRole> list = roleService.selectRoleList(role);
+        return getDataTable(list);
     }
 
     /**
@@ -45,19 +55,9 @@ public class SysRoleController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:role:query')")
     @GetMapping(value = "/{roleId}")
-    public SysRole getInfo(@PathVariable String roleId)
+    public AjaxResult getInfo(@PathVariable String roleId)
     {
-        return roleService.selectRoleById(roleId);
-    }
-
-    @GetMapping("/checkRoleNameUnique")
-    public String checkRoleNameUnique(SysRole role) {
-        return roleService.checkRoleNameUnique(role);
-    }
-
-    @GetMapping("checkRoleKeyUnique")
-    public String checkRoleKeyUnique(SysRole role) {
-        return roleService.checkRoleKeyUnique(role);
+        return AjaxResult.success(roleService.selectRoleById(roleId));
     }
 
     /**
@@ -65,13 +65,20 @@ public class SysRoleController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:role:add')")
     @PostMapping("/add")
-    public int add(@RequestBody SysRole role)
+    public AjaxResult add(@Validated @RequestBody SysRole role)
     {
-        return roleService.insertRole(role);
+        if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleNameUnique(role)))
+        {
+            return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色名称已存在");
+        }
+        else if (UserConstants.NOT_UNIQUE.equals(roleService.checkRoleKeyUnique(role)))
+        {
+            return AjaxResult.error("新增角色'" + role.getRoleName() + "'失败，角色权限已存在");
+        }
+        role.setCreateBy(SecurityUtils.getUsername());
+        return toAjax(roleService.insertRole(role));
 
     }
-
-
 
     /**
      * 修改保存角色
@@ -121,24 +128,12 @@ public class SysRoleController extends BaseController {
      * 状态修改
      */
     @PreAuthorize("@ss.hasPermi('system:role:edit')")
-    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public AjaxResult changeStatus(@RequestBody SysRole role)
     {
         roleService.checkRoleAllowed(role);
         role.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(roleService.updateRoleStatus(role));
-    }
-
-    /**
-     * 删除角色
-     */
-    @PreAuthorize("@ss.hasPermi('system:role:remove')")
-    @Log(title = "角色管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{roleIds}")
-    public AjaxResult remove(@PathVariable Long[] roleIds)
-    {
-        return toAjax(roleService.deleteRoleByIds(roleIds));
     }
 
     /**
@@ -149,5 +144,28 @@ public class SysRoleController extends BaseController {
     public AjaxResult optionselect()
     {
         return AjaxResult.success(roleService.selectRoleAll());
+    }
+
+    /**
+     * 通过角色ID删除角色
+     *
+     * @param roleId 角色ID
+     * @return 结果
+     */
+    @PreAuthorize("@ss.hasPermi('system:role:remove')")
+    @DeleteMapping("/{roleId}")
+    public AjaxResult deleteRoleById(@PathVariable("roleId") String roleId) {
+        return AjaxResult.success(roleService.deleteRoleById(roleId));
+    }
+
+    /**
+     * 根据用户ID查询角色
+     *
+     * @param userId 用户ID
+     * @return 权限列表
+     */
+    @GetMapping("/selectRolePermissionByUserId/{userId}")
+    public Set<String> selectRolePermissionByUserId(@PathVariable("userId") String userId) {
+        return roleService.selectRolePermissionByUserId(userId);
     }
 }
